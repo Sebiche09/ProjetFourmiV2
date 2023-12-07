@@ -15,7 +15,8 @@ def move(x, y, count, move, window_width, window_height):
 
     POST:
     - Effectue le mouvement de la fourmi soldat en fonction de la logique définie.
-    - Les nouvelles coordonnées, le nouveau compteur de mouvement et la nouvelle direction sont renvoyés.
+    - Les nouvelles coordonnées, le nouveau compteur de mouvement et la nouvelle
+    direction sont renvoyés.
     """
     # Choisir un mouvement aléatoire
     global angle, distance
@@ -42,7 +43,8 @@ def move(x, y, count, move, window_width, window_height):
     new_x = x + distance * math.cos(angle)
     new_y = y + distance * math.sin(angle)
 
-    if not (30 <= new_x <= window_width - 30 and window_height / 6 + 30 <= new_y <= window_height - 30):
+    if not (30 <= new_x <= window_width -
+            30 and window_height / 6 + 30 <= new_y <= window_height - 30):
         # Inverser la direction en ajoutant ou soustrayant π (pi)
         angle += math.pi
         # Recalculer les nouvelles coordonnées avec la direction inversée
@@ -59,7 +61,9 @@ def action():
     POST:
     - Gère la logique d'action spécifique aux soldats.
     - Cela peut inclure des comportements offensifs, défensifs ou d'autres interactions.
-    - Cette fonction peut être appelée à chaque itération de la simulation pour mettre à jour l'état des soldats.
+    - Cette fonction peut être appelée à chaque itération de la simulation
+    pour mettre à jour l'état des soldats.
+    MAX
     """
     pass
 
@@ -80,6 +84,7 @@ def check_color_and_adjust(x, y, move, count, screen, noise_map, digging_list):
     - Si la couleur correspond à une zone de creusage, ajuste le mouvement en conséquence.
     - Si la couleur est différente, la fourmi continue dans la direction actuelle.
     - Les nouvelles coordonnées et le nouvel angle sont renvoyés après ajustement.
+    MAX
     """
     color_under_ant = screen.get_at((int(x + 8), int(y + 8)))
 

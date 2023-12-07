@@ -1,7 +1,8 @@
 import random
 import time
-from .ant import Queen, Larva, Ant, SlaverAnt, NurseAnt, SlaveAnt, MaleAnt,SoldierAnt
+from .ant import Queen, Larva, Ant, SlaverAnt, NurseAnt, SlaveAnt, MaleAnt, SoldierAnt
 from collections import defaultdict
+
 
 class AntColony:
     def __init__(self):
@@ -10,8 +11,6 @@ class AntColony:
         self.__time = 0
         self.generated_ant_types = []
         self.dicAnt = {}
-
-
 
     @property
     def time(self):
@@ -22,7 +21,7 @@ class AntColony:
             self.__time += 1
             print(f"Temps passé: {self.__time} unité(s)")
 
-            new_larva = self.queen.lay_eggs()
+            new_larva = self.queen
             if new_larva:
                 print("La reine a pondu un œuf.")
                 self.add_larva(new_larva)
@@ -36,11 +35,10 @@ class AntColony:
         print(f"Nombre de larves : {len(self.larvae)}")
         print(f"Nombre de fourmis : {len(self.queen.accepted_ants)}")
         print(f"Types de fourmis générés : {self.generated_ant_types}")
-    
 
     def show_generated_ant_types(self):
         print("\nTypes de fourmis générés pendant la simulation:")
-        
+
         ant_type_counts = defaultdict(int)
 
         for ant_type in self.generated_ant_types:
@@ -63,5 +61,3 @@ class AntColony:
 
     def remove_larva(self, larva):
         self.larvae.remove(larva)
-
-

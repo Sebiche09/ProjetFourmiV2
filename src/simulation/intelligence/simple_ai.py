@@ -16,6 +16,7 @@ def move(x, y, count, move, window_width, window_height):
     - La logique de mouvement spécifique aux mâles est gérée dans cette fonction.
     - Les nouvelles coordonnées sont calculées en fonction de la direction actuelle et du compteur de mouvement.
     - Si la fourmi atteint les bords de la fenêtre, elle change de direction de manière aléatoire.
+    MAX
     """
     # Logique de mouvement pour les mâles
     if count == 0:
@@ -75,6 +76,7 @@ def check_color_and_adjust(x, y, move, count, window_width, window_heigth, scree
     - Si la couleur correspond à une zone de creusage, ajuste le mouvement en conséquence.
     - Si la couleur est différente, la fourmi continue dans la direction actuelle.
     - Les nouvelles coordonnées et le nouvel angle sont renvoyés après ajustement.
+    SEB
     """
     color_under_ant = screen.get_at((int(x + 6), int(y + 6)))
     if color_under_ant == (34, 139, 34):

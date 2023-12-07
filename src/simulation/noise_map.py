@@ -12,7 +12,9 @@ def generate_noise_map(width, height, scale, octaves, persistence, lacunarity, s
 
     POST:
     - Retourne une carte de bruit 2D normalisée entre 0 et 1.
-    - La carte de bruit est représentée sous la forme d'une liste de listes avec les dimensions width x height.
+    - La carte de bruit est représentée sous la forme d'une liste de listes avec les
+    dimensions width x height.
+    SEB
     """
     world = [[0] * height for _ in range(width)]
     for i in range(width):
