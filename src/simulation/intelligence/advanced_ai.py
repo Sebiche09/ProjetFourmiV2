@@ -17,6 +17,7 @@ def move(x, y, count, move, window_width, window_height):
     - Effectue le mouvement de la fourmi soldat en fonction de la logique définie.
     - Les nouvelles coordonnées, le nouveau compteur de mouvement et la nouvelle
     direction sont renvoyés.
+    FLO
     """
     # Choisir un mouvement aléatoire
     global angle, distance
