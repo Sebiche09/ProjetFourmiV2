@@ -29,13 +29,13 @@ def move(x, y, count, move, window_width, window_height):
             angle = math.pi  # vers la gauche
         elif random_move == 3:
             angle = 3 * math.pi / 2  # vers le bas
-        distance = 10
+        distance = 1
         move = angle
-        count = random.randint(7, 12)
+        count = random.randint(50, 60)
 
     if count != 0:
         angle = move
-        distance = 10
+        distance = 1
         count -= 1
 
     # Calculer les nouvelles coordonnées en fonction de la direction

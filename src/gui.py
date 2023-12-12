@@ -1,6 +1,8 @@
 """module"""
 import random
 import pygame
+import matplotlib.pyplot as plt
+
 from simulation.ant import hatch
 from pygame.locals import QUIT, MOUSEBUTTONDOWN
 from simulation.noise_map import generate_noise_map
@@ -11,7 +13,7 @@ from simulation.intelligence.advanced_ai import (
     check_color_and_adjust as soldier_check_color_and_adjust)
 
 noise_map = generate_noise_map(3440, 1440, scale=135, octaves=1,
-                               persistence=2, lacunarity=0.6, seed=2)
+                               persistence=2, lacunarity=0.6, seed=random.randint(0,100))
 
 
 def run_simulation_gui(ant_colony):
@@ -33,6 +35,9 @@ def run_simulation_gui(ant_colony):
         knob_position = (position[0] + int(value * width), position[1] + height // 2)
         pygame.draw.circle(window, (255, 0, 0), knob_position, 10)
 
+    plt.imshow(noise_map, cmap='viridis', interpolation='nearest')
+    plt.colorbar()
+    plt.show()
     pygame.init()
     # --------------------------------------------- Infos screen
     # ------------------------------------------------------
@@ -58,7 +63,7 @@ def run_simulation_gui(ant_colony):
     simulation_running = True
     paused = False
     simulation_speed = 1
-
+    last_dig_direction = 0
     # --------------------------------------------- Début simulation
     # ----------------------------------------------
     while running and simulation_running:
@@ -79,15 +84,6 @@ def run_simulation_gui(ant_colony):
                         simulation_speed = (event.pos[0] - slider_rect.left) / slider_rect.width
         if not paused:
             screen.fill(background_color)
-            # Dessiner la noise map
-
-            # for i in range(window_width):
-            #   for j in range(window_height):
-            #      value = int(noise_map[i][j] * 255)  # Convertir la valeur
-            #      de bruit en une valeur de couleur
-            #     color = (value, value, value)
-            #    pygame.draw.rect(screen, color, (i, j, 1, 1))
-
             pygame.draw.rect(screen, (255, 255, 255),
                              (window_width // 2 - 100, window_height // 2 - 100, 200, 200))
             pygame.draw.rect(screen, (255, 255, 255),
@@ -205,13 +201,12 @@ def run_simulation_gui(ant_colony):
                     elif ant.ant_type == "Slave":
                         pygame.draw.circle(screen, (255, 255, 0), (x, y), 6)
                     if ant.ant_type == "Soldier":
-                        new_x, new_y, count, move= soldier_move(x, y, count,move,
+                        new_x, new_y, count, move = soldier_move(x, y, count,move,
                                                                  window_width, window_height)
                         soldier_action()
 
-                        move, count = soldier_check_color_and_adjust(new_x, new_y, move, count,
-                                                                     screen, noise_map,
-                                                                     digging_list)
+                        move, count, last_dig_direction = soldier_check_color_and_adjust(new_x, new_y, move, count,
+                                                                     screen, noise_map, digging_list, last_dig_direction)
 
                         ant_colony.dicAnt[ant_key] = (ant, new_x, new_y, count, move)
                         pygame.draw.circle(screen, (0, 0, 255),
@@ -223,6 +218,6 @@ def run_simulation_gui(ant_colony):
                 del ant_colony.dicAnt[ant_key]
 
             pygame.display.flip()
-            clock.tick(60 * simulation_speed)  # Limite le nombre d'images par seconde
+            clock.tick(500 * simulation_speed)  # Limite le nombre d'images par seconde
 
     pygame.quit()
