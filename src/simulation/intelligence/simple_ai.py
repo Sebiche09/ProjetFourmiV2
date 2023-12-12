@@ -58,6 +58,7 @@ def action():
     - La logique d'action spécifique aux mâles est gérée dans cette fonction.
     - Pour les fourmis mâles, il peut s'agir de interactions spécifiques ou de comportements particuliers.
     - Cette fonction peut être appelée à chaque itération de la simulation pour mettre à jour l'état des fourmis mâles.
+    FLO
     """
     pass
 def check_color_and_adjust(x, y, move, count, window_width, window_heigth, screen):
