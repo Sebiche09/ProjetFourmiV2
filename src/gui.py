@@ -24,6 +24,7 @@ def run_simulation_gui(ant_colony):
     POST:
     - Lance une simulation graphique de la colonie de fourmis avec une interface utilisateur.
     - Aucune modification permanente de l'état de la colonie n'est effectuée par cette fonction.
+    FLO
     """
 
     def draw_slider(window, position, width, height, value):
