@@ -1,7 +1,5 @@
-import random
-import time
-from .ant import Queen, Larva, Ant, SlaverAnt, NurseAnt, SlaveAnt, MaleAnt, SoldierAnt
 from collections import defaultdict
+from .ant import Queen, hatch
 
 
 class AntColony:
@@ -25,7 +23,7 @@ class AntColony:
             if new_larva:
                 print("La reine a pondu un œuf.")
                 self.add_larva(new_larva)
-                new_ant = new_larva.hatch()
+                new_ant = hatch()
                 print(f"Une nouvelle fourmi ({new_ant.ant_type}) est née!")
                 self.queen.accept_new_ant(new_ant)
                 self.remove_larva(new_larva)
@@ -54,7 +52,8 @@ class AntColony:
         return len(self.larvae)
 
     def get_ant_count(self):
-        return sum(1 for larva in self.larvae if larva.age >= larva.time_to_hatch) + len(self.queen.accepted_ants)
+        return (sum(1 for larva in self.larvae if larva.age >= larva.time_to_hatch) +
+                len(self.queen.accepted_ants))
 
     def add_larva(self, larva):
         self.larvae.append(larva)

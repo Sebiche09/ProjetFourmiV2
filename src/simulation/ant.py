@@ -44,12 +44,18 @@ class Ant:
 class Queen(Ant):
     def __init__(self):
         super().__init__("Queen", 10, 0, 0)
-        self.laying_rate = 0.05
+        self.__laying_rate = 0.05
         self.accepted_ants = []
         self.generated_ant_types = []
 
-    def set_laying_rate(self, value):
-        self.laying_rate = value
+    @property
+    def laying_rate(self):
+        return self.__laying_rate
+
+    @laying_rate.setter
+    def laying_rate(self, new_laying_rate):
+        if 0.01 < new_laying_rate <= 0.1:
+            self.__laying_rate = new_laying_rate
 
     def lay_eggs(self):
         global LARVA_ID_COUNT

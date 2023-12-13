@@ -1,8 +1,8 @@
 """module"""
 import random
 import pygame
-from simulation.ant import hatch
 from pygame.locals import QUIT, MOUSEBUTTONDOWN
+from simulation.ant import hatch
 from simulation.noise_map import generate_noise_map
 from simulation.intelligence.simple_ai import (
     move as male_move, action as male_action, check_color_and_adjust as male_check_color_and_adjust)
@@ -10,8 +10,13 @@ from simulation.intelligence.advanced_ai import (
     move as soldier_move, action as soldier_action,
     check_color_and_adjust as soldier_check_color_and_adjust)
 
-noise_map = generate_noise_map(3440, 1440, scale=135, octaves=1,
-                               persistence=2, lacunarity=0.6, seed=2)
+try:
+    noise_map = generate_noise_map(3440, 1440, scale=135, octaves=1,
+                                   persistence=2, lacunarity=0.6, seed=2)
+except ValueError as e:
+    print(f"Erreur : {e}")
+except RuntimeError as e:
+    print(f"Erreur : {e}")
 
 
 def run_simulation_gui(ant_colony):
@@ -24,6 +29,7 @@ def run_simulation_gui(ant_colony):
     POST:
     - Lance une simulation graphique de la colonie de fourmis avec une interface utilisateur.
     - Aucune modification permanente de l'état de la colonie n'est effectuée par cette fonction.
+    FLO
     """
 
     def draw_slider(window, position, width, height, value):
@@ -204,7 +210,7 @@ def run_simulation_gui(ant_colony):
                     elif ant.ant_type == "Slave":
                         pygame.draw.circle(screen, (255, 255, 0), (x, y), 6)
                     if ant.ant_type == "Soldier":
-                        new_x, new_y, count, move= soldier_move(x, y, count,move,
+                        new_x, new_y, count, move = soldier_move(x, y, count, move,
                                                                  window_width, window_height)
                         soldier_action()
 

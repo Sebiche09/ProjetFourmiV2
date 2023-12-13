@@ -20,14 +20,22 @@ def run_simulation_cli(ant_colony, simulation_time):
     - Affiche le nombre de larves et de fourmis à la fin de la simulation.
     SEB
     """
-    for _ in range(int(simulation_time)):
-        ant_colony.simulate_time_passing(1)
-        time.sleep(1)
+    try:
+        for _ in range(int(simulation_time)):
+            ant_colony.simulate_time_passing(1)
+            time.sleep(1)
 
-    larva_count = ant_colony.get_larva_count()
-    ant_count = ant_colony.get_ant_count()
-    print(f"Nombre de larves: {larva_count}")
-    print(f"Nombre de fourmis: {ant_count}")
+        larva_count = ant_colony.get_larva_count()
+        ant_count = ant_colony.get_ant_count()
+        print(f"Nombre de larves: {larva_count}")
+        print(f"Nombre de fourmis: {ant_count}")
+    except AttributeError as e:
+        raise RuntimeError(
+            "La classe AntColony doit implémenter les méthodes simulate_time_passing,"
+            " get_larva_count et get_ant_count.") from e
+    except ValueError as e:
+        # Si simulation_time n'est pas convertible en entier
+        raise ValueError("La durée de simulation doit être un nombre entier.") from e
 
 
 def main(ant_colony):
@@ -45,24 +53,28 @@ def main(ant_colony):
     MAX
     """
     while True:
-        parser = argparse.ArgumentParser(description='Simulation de gestion de colonie de fourmis')
-        parser.add_argument('--gui', action='store_true', help='Lancer l\'interface graphique')
+        try:
+            parser = argparse.ArgumentParser(description='Simulation de gestion de colonie de fourmis')
+            parser.add_argument('--gui', action='store_true', help='Lancer l\'interface graphique')
 
-        args = parser.parse_args()
+            args = parser.parse_args()
 
-        if args.gui:
-            run_simulation_gui(ant_colony)
-        else:
-            temps_simulation = input("Combien de temps voulez-vous faire avancer la simulation? ")
-            run_simulation_cli(ant_colony, temps_simulation)
+            if args.gui:
+                run_simulation_gui(ant_colony)
+            else:
+                temps_simulation = input("Combien de temps voulez-vous faire avancer la simulation? ")
+                run_simulation_cli(ant_colony, temps_simulation)
 
-        afficher_types_fourmis = input(
-            "Afficher les types de fourmis générés pendant la simulation ? (Oui/Non): ").lower()
-        if afficher_types_fourmis == "oui":
-            ant_colony.show_generated_ant_types()
+            afficher_types_fourmis = input(
+                "Afficher les types de fourmis générés pendant la simulation ? (Oui/Non): ").lower()
+            if afficher_types_fourmis == "oui":
+                ant_colony.show_generated_ant_types()
 
-        continuer_simulation = input("Voulez-vous continuer la simulation? (Oui/Non): ").lower()
-        if continuer_simulation != "oui":
+            continuer_simulation = input("Voulez-vous continuer la simulation? (Oui/Non): ").lower()
+            if continuer_simulation != "oui":
+                break
+        except KeyboardInterrupt:
+            print("\nSimulation interrompue par l'utilisateur.")
             break
 
 

@@ -16,23 +16,29 @@ def generate_noise_map(width, height, scale, octaves, persistence, lacunarity, s
     dimensions width x height.
     SEB
     """
-    world = [[0] * height for _ in range(width)]
-    for i in range(width):
-        for j in range(height):
-            world[i][j] = noise.pnoise2(i / scale,
-                                        j / scale,
-                                        octaves=octaves,
-                                        persistence=persistence,
-                                        lacunarity=lacunarity,
-                                        repeatx=1024,
-                                        repeaty=1024,
-                                        base=seed)
+    try:
+        world = [[0] * height for _ in range(width)]
+        for i in range(width):
+            for j in range(height):
+                world[i][j] = noise.pnoise2(i / scale,
+                                            j / scale,
+                                            octaves=octaves,
+                                            persistence=persistence,
+                                            lacunarity=lacunarity,
+                                            repeatx=1024,
+                                            repeaty=1024,
+                                            base=seed)
 
-    # Normalisation des valeurs pour les ramener entre 0 et 1
-    min_noise = min(map(min, world))
-    max_noise = max(map(max, world))
-    for i in range(width):
-        for j in range(height):
-            world[i][j] = (world[i][j] - min_noise) / (max_noise - min_noise)
+        # Normalisation des valeurs pour les ramener entre 0 et 1
+        min_noise = min(map(min, world))
+        max_noise = max(map(max, world))
+        for i in range(width):
+            for j in range(height):
+                world[i][j] = (world[i][j] - min_noise) / (max_noise - min_noise)
 
-    return world
+        return world
+    except (ValueError, TypeError) as e:
+        raise ValueError("Les paramètres de la fonction doivent être des valeurs numériques valides.") from e
+    except Exception as e:
+        raise RuntimeError(f"Une erreur inattendue s'est produite : {e}") from e
+

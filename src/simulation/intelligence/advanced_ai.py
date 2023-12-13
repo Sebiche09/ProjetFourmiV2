@@ -1,6 +1,8 @@
 import math
 import random
+
 global angle, distance
+
 
 def move(x, y, count, move, window_width, window_height):
     """
@@ -17,41 +19,47 @@ def move(x, y, count, move, window_width, window_height):
     - Effectue le mouvement de la fourmi soldat en fonction de la logique définie.
     - Les nouvelles coordonnées, le nouveau compteur de mouvement et la nouvelle
     direction sont renvoyés.
+    FLO
     """
     # Choisir un mouvement aléatoire
-    global angle, distance
-    if count == 0:
-        random_move = random.randint(0, 3)
-        if random_move == 0:
-            angle = 0  # vers la droite
-        elif random_move == 1:
-            angle = math.pi / 2  # vers le haut
-        elif random_move == 2:
-            angle = math.pi  # vers la gauche
-        elif random_move == 3:
-            angle = 3 * math.pi / 2  # vers le bas
-        distance = 10
-        move = angle
-        count = random.randint(7, 12)
+    try:
+        global angle, distance
+        if count == 0:
+            random_move = random.randint(0, 3)
+            if random_move == 0:
+                angle = 0  # vers la droite
+            elif random_move == 1:
+                angle = math.pi / 2  # vers le haut
+            elif random_move == 2:
+                angle = math.pi  # vers la gauche
+            elif random_move == 3:
+                angle = 3 * math.pi / 2  # vers le bas
+            distance = 10
+            move = angle
+            count = random.randint(7, 12)
 
-    if count != 0:
-        angle = move
-        distance = 10
-        count -= 1
+        if count != 0:
+            angle = move
+            distance = 10
+            count -= 1
 
-    # Calculer les nouvelles coordonnées en fonction de la direction
-    new_x = x + distance * math.cos(angle)
-    new_y = y + distance * math.sin(angle)
-
-    if not (30 <= new_x <= window_width -
-            30 and window_height / 6 + 30 <= new_y <= window_height - 30):
-        # Inverser la direction en ajoutant ou soustrayant π (pi)
-        angle += math.pi
-        # Recalculer les nouvelles coordonnées avec la direction inversée
+        # Calculer les nouvelles coordonnées en fonction de la direction
         new_x = x + distance * math.cos(angle)
         new_y = y + distance * math.sin(angle)
 
-    return new_x, new_y, count, move
+        if not (30 <= new_x <= window_width -
+                30 and window_height / 6 + 30 <= new_y <= window_height - 30):
+            # Inverser la direction en ajoutant ou soustrayant π (pi)
+            angle += math.pi
+            # Recalculer les nouvelles coordonnées avec la direction inversée
+            new_x = x + distance * math.cos(angle)
+            new_y = y + distance * math.sin(angle)
+
+        return new_x, new_y, count, move
+    except ValueError as e:
+        raise ValueError("La fonction move a rencontré une erreur de valeur.") from e
+    except Exception as e:
+        raise RuntimeError(f"Une erreur inattendue s'est produite dans la fonction move : {e}") from e
 
 
 def action():
