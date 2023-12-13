@@ -40,6 +40,9 @@ class Ant:
     def dead(self):
         self.status_dead = True
 
+    def __str__(self):
+        return f"je suis une fourmi et mon id est {self.id}"
+
 
 class Queen(Ant):
     def __init__(self):
@@ -79,21 +82,36 @@ class Queen(Ant):
     def accept_new_ant(self, ant):
         self.accepted_ants.append(ant)
 
+    def __str__(self):
+        return super().__str__() + f", je suis une reine"
+
 
 class MaleAnt(Ant):
     def __init__(self):
         super().__init__("Male")
         # Add any specific attributes or methods for MaleAnt
 
+    def __str__(self):
+        return super().__str__() + f", je suis un male"
+
 
 class NurseAnt(Ant):
     def __init__(self):
         super().__init__("Nurse")
-        self.nurse_augment = 0.1
+        self.__nurse_augment = 0.1
         # Add any specific attributes or methods for NurseAnt
 
-    def set_nurse_augment(self, value):
-        self.nurse_augment = value
+    @property
+    def nurse_augment(self):
+        return self.__nurse_augment
+
+    @nurse_augment.setter
+    def nurse_augment(self, new_nurse_augment):
+        if 0.05 < new_nurse_augment <= 0.5:
+            self.__nurse_augment = new_nurse_augment
+
+    def __str__(self):
+        return super().__str__() + f", je suis une infirmière"
 
 
 class SlaverAnt(Ant):
@@ -101,16 +119,25 @@ class SlaverAnt(Ant):
         super().__init__("Slaver")
         # Add any specific attributes or methods for ForagerAnt
         self.add_slave = random.randint(1, 5)
-        self.survive_rate = 0.2
+        self.__survive_rate = 0.2
 
-    def set_survive_rate(self, value):
-        self.survive_rate = value
+    @property
+    def survive_rate(self):
+        return self.__survive_rate
+
+    @survive_rate.setter
+    def survive_rate(self, new_survive_rate):
+        if 0.1 < new_survive_rate <= 0.5:
+            self.__survive_rate = new_survive_rate
 
     def go_outside_slaver(self):
         pass
 
     def come_back_slaver(self):
         pass
+
+    def __str__(self):
+        return super().__str__() + f", je suis un esclavagiste"
 
 
 class SlaveAnt(Ant):
@@ -125,6 +152,9 @@ class SlaveAnt(Ant):
     def revolt(self):
         if random.random() < self.revolt_rate:
             pass
+
+    def __str__(self):
+        return super().__str__() + f", je suis un esclave"
 
 
 class SoldierAnt(Ant):
@@ -144,3 +174,6 @@ class SoldierAnt(Ant):
 
     def dig_speed_modify(self, value):
         self.dig_speed = value
+
+    def __str__(self):
+        return super().__str__() + f", je suis un soldat"

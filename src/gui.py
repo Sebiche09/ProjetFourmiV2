@@ -2,7 +2,6 @@
 import random
 import pygame
 import matplotlib.pyplot as plt
-
 from simulation.ant import hatch
 from pygame.locals import QUIT, MOUSEBUTTONDOWN
 from simulation.noise_map import generate_noise_map
