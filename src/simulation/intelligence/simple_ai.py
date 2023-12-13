@@ -61,26 +61,25 @@ def action():
     FLO
     """
     pass
-def check_color_and_adjust(x, y, move, count, window_width, window_heigth, screen):
+def check_color_and_adjust(x, y, move, count, window_width, window_height, screen):
     """
     Fonction pour vérifier la couleur sous la fourmi et ajuster le mouvement en conséquence.
 
     PRE:
-    - new_x et new_y sont les nouvelles coordonnées de la fourmi.
-    - angle est un flottant représentant la direction actuelle de la fourmi.
-    - distance est un flottant représentant la distance à parcourir.
-    - window est la surface de la fenêtre de simulation.
-    - digging_list est une liste contenant les coordonnées des zones de creusage.
+    - x et y sont les coordonnées actuelles de la fourmi.
+    - move est un flottant représentant la direction actuelle de la fourmi.
+    - count est un entier représentant un compteur.
+    - window_width et window_height sont des entiers représentant la largeur et la hauteur de la fenêtre.
+    - screen est la surface de la fenêtre de simulation.
 
     POST:
     - Vérifie la couleur sous la fourmi sur la surface de la fenêtre.
-    - Si la couleur correspond à une zone de creusage, ajuste le mouvement en conséquence.
+    - Si la couleur correspond à une zone de creusage (vert), ajuste le mouvement en conséquence.
     - Si la couleur est différente, la fourmi continue dans la direction actuelle.
-    - Les nouvelles coordonnées et le nouvel angle sont renvoyés après ajustement.
-    SEB
+    - Les nouveaux mouvement (move) et compteur (count) sont renvoyés après ajustement.
     """
     color_under_ant = screen.get_at((int(x + 6), int(y + 6)))
-    if color_under_ant == (34, 139, 34):
+    if color_under_ant == (34, 139, 34):  # Couleur verte représentant une zone de creusage
         move = move - math.pi  # Inverser la direction si la couleur sous la fourmi est verte
         count = random.randint(7, 12)
     return move, count
