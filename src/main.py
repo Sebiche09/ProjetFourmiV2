@@ -1,8 +1,14 @@
 import argparse
 import time
+from colorama import Fore, Style, init
 from simulation.colony import AntColony
 from gui import run_simulation_gui
 
+def show_help():
+    print("Liste des commandes disponibles:")
+    print("help - Afficher cette aide")
+    print("exit - Quitter le programme")
+    print("simulate - Lancer la simulation")
 
 def run_simulation_cli(ant_colony, simulation_time):
     """
@@ -52,19 +58,40 @@ def main(ant_colony):
     - La simulation continue tant que l'utilisateur souhaite poursuivre.
     MAX
     """
+    print(f"{Fore.GREEN}Bienvenue dans le simulateur de colonie de fourmis!{Style.RESET_ALL}")
+    show_help()
+
     while True:
         try:
-            parser = argparse.ArgumentParser(description='Simulation de gestion de colonie de fourmis')
-            parser.add_argument('--gui', action='store_true', help='Lancer l\'interface graphique')
+            user_input = input("Entrez une commande (help pour afficher l'aide): ").lower()
 
-            args = parser.parse_args()
-
-            if args.gui:
-                run_simulation_gui(ant_colony)
-            else:
+            if user_input == "help":
+                show_help()
+            elif user_input == "exit":
+                print("Au revoir!")
+                break
+            elif user_input == "simulate":
                 temps_simulation = input("Combien de temps voulez-vous faire avancer la simulation? ")
-                run_simulation_cli(ant_colony, temps_simulation)
+                if not temps_simulation.isdigit():
+                    print("Erreur: La durée de simulation doit être un nombre entier.")
+                else:
+                    temps_simulation = int(temps_simulation)
+                    if temps_simulation <= 0:
+                        print("Erreur: La durée de simulation doit être un nombre positif.")
+                    else:
+                        run_simulation_cli(ant_colony, temps_simulation)
+            elif user_input.startswith('kill'):
+                # Récupérez le type de fourmi à tuer à partir de la commande
+                ant_type_to_kill = user_input[len('kill'):].strip().capitalize()
+                ant_colony.kill_ant_by_type(ant_type_to_kill)
+                ant_colony.show_generated_ant_types()
 
+            else:
+                print("Commande non reconnue. Utilisez help pour afficher les commandes disponibles.")
+
+            print("killFourmi - Tuer une fourmi")
+            print("addFourmi - Ajouter une fourmi")
+            print("spawnLarve - Ajouter une larve")
             afficher_types_fourmis = input(
                 "Afficher les types de fourmis générés pendant la simulation ? (Oui/Non): ").lower()
             if afficher_types_fourmis == "oui":
@@ -79,5 +106,5 @@ def main(ant_colony):
 
 
 if __name__ == "__main__":
-    colony = AntColony()
-    main(colony)
+    ant_colony = AntColony()
+    main(ant_colony)
