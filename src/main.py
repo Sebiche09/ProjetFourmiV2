@@ -90,8 +90,6 @@ def main(ant_colony):
                 print("Commande non reconnue. Utilisez help pour afficher les commandes disponibles.")
 
             print("killFourmi - Tuer une fourmi")
-            print("addFourmi - Ajouter une fourmi")
-            print("spawnLarve - Ajouter une larve")
             afficher_types_fourmis = input(
                 "Afficher les types de fourmis générés pendant la simulation ? (Oui/Non): ").lower()
             if afficher_types_fourmis == "oui":
