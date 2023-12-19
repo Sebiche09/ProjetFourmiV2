@@ -1,14 +1,17 @@
-import argparse
+# ------------------------------- Modules --------------------------------------
+"""Modules"""
 import time
-#from colorama import Fore, Style, init
 from simulation.colony import AntColony
 from gui import run_simulation_gui
 
+# ------------------------------------------------------------------------------
 def show_help():
     print("Liste des commandes disponibles:")
     print("help - Afficher cette aide")
     print("exit - Quitter le programme")
-    print("simulate - Lancer la simulation")
+    print("simulate-cli - Lancer la simulation en ligne de commande")
+    print("simulate-gui - Lancer la simulation en interface graphique")
+
 
 def run_simulation_cli(ant_colony, simulation_time):
     """
@@ -70,8 +73,9 @@ def main(ant_colony):
             elif user_input == "exit":
                 print("Au revoir!")
                 break
-            elif user_input == "simulate":
-                temps_simulation = input("Combien de temps voulez-vous faire avancer la simulation? ")
+            elif user_input == "simulate-cli":
+                temps_simulation = input("Combien de temps voulez-vous faire "
+                                         "avancer la simulation? ")
                 if not temps_simulation.isdigit():
                     print("Erreur: La durée de simulation doit être un nombre entier.")
                 else:
@@ -80,6 +84,8 @@ def main(ant_colony):
                         print("Erreur: La durée de simulation doit être un nombre positif.")
                     else:
                         run_simulation_cli(ant_colony, temps_simulation)
+            elif user_input == "simulate-gui":
+                run_simulation_gui(ant_colony)
             elif user_input.startswith('kill'):
                 # Récupérez le type de fourmi à tuer à partir de la commande
                 ant_type_to_kill = user_input[len('kill'):].strip().capitalize()
@@ -87,7 +93,8 @@ def main(ant_colony):
                 ant_colony.show_generated_ant_types()
 
             else:
-                print("Commande non reconnue. Utilisez help pour afficher les commandes disponibles.")
+                print("Commande non reconnue. Utilisez help pour "
+                      "afficher les commandes disponibles.")
 
             print("killFourmi - Tuer une fourmi")
             afficher_types_fourmis = input(
