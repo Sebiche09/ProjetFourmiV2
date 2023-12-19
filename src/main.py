@@ -1,8 +1,8 @@
-# ------------------------------- Modules --------------------------------------
 """Modules"""
 import time
 from simulation.colony import AntColony
 from gui import run_simulation_gui
+
 
 # ------------------------------------------------------------------------------
 def show_help():
