@@ -13,7 +13,7 @@ class AntColony:
         self.generated_ant_types = []
         self.dicAnt = {}
         self.killed_ant_types = []
-        self.max_larvae_spawn = 10
+        self.max_larvae_spawn = 20
         self.max_ants_spawn = 10
 
     @property
@@ -26,7 +26,7 @@ class AntColony:
             print(f"Temps passé: {self.__time} unité(s)")
 
             # Spawn multiple larvae
-            num_larvae = random.randint(1, self.max_larvae_spawn)
+            num_larvae = random.randint(10, 15)
             for _ in range(num_larvae):
                 new_larva = self.queen.lay_eggs()
                 if new_larva:
@@ -52,8 +52,9 @@ class AntColony:
                 print(f"Une nouvelle fourmi ({new_ant_type}) est née !")
                 self.queen.accept_new_ant(new_ant)
                 self.generated_ant_types.append(new_ant_type)
+            self.max_larvae_spawn = random.randint(10, 15)
 
-            print(f"Nombre de larves : {len(self.larvae)}")
+            print(f"Nombre d'oeufs : {len(self.larvae)}")
             print(f"Nombre de fourmis : {len(self.queen.accepted_ants)}")
             print(f"Types de fourmis générés : {self.generated_ant_types}")
 

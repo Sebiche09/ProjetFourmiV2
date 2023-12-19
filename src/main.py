@@ -1,6 +1,6 @@
 import argparse
 import time
-from colorama import Fore, Style, init
+#from colorama import Fore, Style, init
 from simulation.colony import AntColony
 from gui import run_simulation_gui
 
@@ -33,7 +33,7 @@ def run_simulation_cli(ant_colony, simulation_time):
 
         larva_count = ant_colony.get_larva_count()
         ant_count = ant_colony.get_ant_count()
-        print(f"Nombre de larves: {larva_count}")
+        print(f"Nombre d'oeufs: {larva_count}")
         print(f"Nombre de fourmis: {ant_count}")
     except AttributeError as e:
         raise RuntimeError(
@@ -58,7 +58,7 @@ def main(ant_colony):
     - La simulation continue tant que l'utilisateur souhaite poursuivre.
     MAX
     """
-    print(f"{Fore.GREEN}Bienvenue dans le simulateur de colonie de fourmis!{Style.RESET_ALL}")
+    print("Bienvenue dans le simulateur de colonie de fourmis!")
     show_help()
 
     while True:
