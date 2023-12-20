@@ -2,15 +2,25 @@
 import time
 from simulation.colony import AntColony
 from gui import run_simulation_gui
+from colorama import Fore, Style
 
+# ------------------------------------------------------------------------
+def show_welcome():
+    welcome_message = "Bienvenue dans le simulateur de colonie de fourmis!"
+    colored_welcome = f"{Fore.CYAN}{Style.BRIGHT}{welcome_message}{Style.RESET_ALL}"
+    frame_width = max(len(welcome_message) + 4, 40)
+    print(f"{Fore.BLUE}+{'-' * (frame_width - 2)}+{Style.RESET_ALL}")
+    print(f"{Fore.GREEN}|{' ' * (frame_width - 2)}|{Style.RESET_ALL}")
+    print(f"{Fore.GREEN}|{colored_welcome.center(frame_width - 2)}|{Style.RESET_ALL}")
+    print(f"{Fore.GREEN}|{' ' * (frame_width - 2)}|{Style.RESET_ALL}")
+    print(f"{Fore.BLUE}+{'-' * (frame_width - 2)}+{Style.RESET_ALL}\n")
 
-# ------------------------------------------------------------------------------
 def show_help():
-    print("Liste des commandes disponibles:")
-    print("help - Afficher cette aide")
-    print("exit - Quitter le programme")
-    print("simulate-cli - Lancer la simulation en ligne de commande")
-    print("simulate-gui - Lancer la simulation en interface graphique")
+    print(f"{Fore.BLUE}Liste des commandes disponibles:{Style.RESET_ALL}")
+    print(f"{Fore.GREEN}help{Style.RESET_ALL} - Afficher cette aide")
+    print(f"{Fore.RED}exit{Style.RESET_ALL} - Quitter le programme")
+    print(f"{Fore.YELLOW}simulate-cli{Style.RESET_ALL} - Lancer la simulation en ligne de commande")
+    print(f"{Fore.YELLOW}simulate-gui{Style.RESET_ALL} - Lancer la simulation en interface graphique")
 
 
 def run_simulation_cli(ant_colony, simulation_time):
@@ -53,11 +63,11 @@ def main(ant_colony):
     - La simulation continue tant que l'utilisateur souhaite poursuivre.
     MAX
     """
-    print("Bienvenue dans le simulateur de colonie de fourmis!")
+    show_welcome()
     show_help()
 
     while True:
-        user_input = input("Entrez une commande (help pour afficher l'aide): ").lower()
+        user_input = input(f"{Fore.CYAN}Entrez une commande (help pour afficher l'aide): {Style.RESET_ALL}").lower()
         if user_input == "help":
             show_help()
         elif user_input == "exit":
@@ -74,16 +84,21 @@ def main(ant_colony):
         elif user_input == "simulate-gui":
             run_simulation_gui(ant_colony)
         elif user_input.startswith('kill'):
-            # Récupérez le type de fourmi à tuer à partir de la commande
-            ant_type_to_kill = user_input[len('kill'):].strip().capitalize()
-            ant_colony.kill_ant_by_type(ant_type_to_kill)
-            ant_colony.show_generated_ant_types()
+
+            parts = user_input.split()
+            if len(parts) == 3 and parts[1].isdigit():
+                ant_type_to_kill = parts[2].capitalize()
+                num_to_kill = int(parts[1])
+                ant_colony.kill_ant_by_type(ant_type_to_kill, num_to_kill)
+                ant_colony.show_generated_ant_types()
+            else:
+                print("Commande kill incorrecte. Utilisation correcte: kill [nombre] [type]")
 
         else:
             print("Commande non reconnue. Utilisez help pour "
                   "afficher les commandes disponibles.")
 
-        print("killFourmi - Tuer une fourmi")
+        print("kill nbr type - Tuer une fourmi")
         afficher_types_fourmis = input(
             "Afficher les types de fourmis générés pendant la simulation ? (Oui/Non): ").lower()
         if afficher_types_fourmis == "oui":

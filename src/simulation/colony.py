@@ -87,22 +87,28 @@ class AntColony:
     def remove_larva(self, larva):
         self.larvae.remove(larva)
 
-    def kill_ant_by_type(self, ant_type):
+    def kill_ant_by_type(self, ant_type, num_to_kill):
         if self.queen.accepted_ants:
             # Filtrer les fourmis du type spécifié
             ant_type_lower = ant_type.lower()
             ants_to_kill = [ant for ant in self.queen.accepted_ants if ant.ant_type.lower() == ant_type_lower]
 
             if ants_to_kill:
-                # Choisir une fourmi du type spécifié au hasard et la tuer
-                ant_to_kill = random.choice(ants_to_kill)
-                self.queen.accepted_ants.remove(ant_to_kill)
-                print(f"{ant_to_kill.ant_type} a été tuée.")
+                # Vérifier que le nombre à tuer n'est pas supérieur au nombre disponible
+                num_to_kill = min(num_to_kill, len(ants_to_kill))
 
-                # Mettre à jour la liste des types générés
-                self.generated_ant_types = [ant_type for ant_type in self.generated_ant_types if
-                                            ant_type.lower() != ant_type_lower]
+                # Tuer le nombre spécifié de fourmis du type spécifié
+                for _ in range(num_to_kill):
+                    ant_to_kill = random.choice(ants_to_kill)
+                    ants_to_kill.remove(ant_to_kill)
+                    print(f"{ant_to_kill.ant_type} a été tuée.")
+
+                    # Mettre à jour la liste des types générés
+                    self.generated_ant_types.remove(ant_type)
+
             else:
                 print(f"Aucune fourmi du type {ant_type} n'est disponible à tuer.")
         else:
             print("Aucune fourmi n'est disponible à tuer.")
+
+
