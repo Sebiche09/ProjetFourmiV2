@@ -96,7 +96,6 @@ def check_color_and_adjust(x, y, move, count, screen, noise_map, digging_list, l
     """
     try:
         color_under_ant = screen.get_at((int(x + 8), int(y + 8)))
-
         # Utiliser la carte de bruit pour déterminer si la fourmi doit creuser
         noise_value = noise_map[int(x)][int(y)]
         digging_threshold = 0.5  # Ajustez ce seuil selon vos besoins
