@@ -16,11 +16,14 @@ class AntColony:
         self.max_larvae_spawn = 20
         self.max_ants_spawn = 10
 
+
     @property
     def time(self):
         return self.__time
 
     def simulate_time_passing(self, time_units):
+        if time_units < 0:
+            raise ValueError("Le temps doit être une valeur positive.")
         for _ in range(time_units):
             self.__time += 1
             print(f"Temps passé: {self.__time} unité(s)")
@@ -100,15 +103,16 @@ class AntColony:
                 # Tuer le nombre spécifié de fourmis du type spécifié
                 for _ in range(num_to_kill):
                     ant_to_kill = random.choice(ants_to_kill)
-                    ants_to_kill.remove(ant_to_kill)
+                    self.queen.accepted_ants.remove(ant_to_kill)
                     print(f"{ant_to_kill.ant_type} a été tuée.")
 
-                    # Mettre à jour la liste des types générés
-                    self.generated_ant_types.remove(ant_type)
+                # Mettre à jour la liste des types générés
+                self.generated_ant_types = [ant.ant_type for ant in self.queen.accepted_ants]
 
             else:
                 print(f"Aucune fourmi du type {ant_type} n'est disponible à tuer.")
         else:
             print("Aucune fourmi n'est disponible à tuer.")
+
 
 

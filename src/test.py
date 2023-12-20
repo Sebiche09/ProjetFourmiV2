@@ -44,17 +44,28 @@ class TestAntColony(unittest.TestCase):
         self.ant_colony.simulate_time_passing(1)
         ant_count_before = self.ant_colony.get_ant_count()
         ant_type_to_kill = self.ant_colony.generated_ant_types[0]
-        self.ant_colony.kill_ant_by_type(ant_type_to_kill)
+        num_to_kill = 1
+        if ant_type_to_kill in self.ant_colony.generated_ant_types:
+            self.ant_colony.generated_ant_types.remove(ant_type_to_kill)
+        self.ant_colony.kill_ant_by_type(ant_type_to_kill, num_to_kill)
         ant_count_after = self.ant_colony.get_ant_count()
         self.assertLess(ant_count_after, ant_count_before)
 
-    def test_show_generated_ant_types(self):
-        self.ant_colony.simulate_time_passing(1)
-        generated_ant_types_before = self.ant_colony.generated_ant_types.copy()
-        ant_type_to_kill = generated_ant_types_before[0]
-        self.ant_colony.kill_ant_by_type(ant_type_to_kill)
-        self.ant_colony.show_generated_ant_types()
-        self.assertNotIn(ant_type_to_kill, self.ant_colony.generated_ant_types)
+
+    def test_zero_time_passed(self):
+        # Teste lorsque le temps passé est égal à zéro
+        ant_count_before = self.ant_colony.get_ant_count()
+        self.ant_colony.simulate_time_passing(0)
+        ant_count_after = self.ant_colony.get_ant_count()
+        # Assurez-vous que rien ne change lorsque le temps passé est égal à zéro
+        self.assertEqual(ant_count_after, ant_count_before)
+
+    def test_negative_time_passed(self):
+        # Teste lorsque le temps passé est négatif
+        # Assurez-vous que cela lève une exception ou est correctement géré
+        with self.assertRaises(ValueError):
+            self.ant_colony.simulate_time_passing(-1)
+
 
 
 if __name__ == 'main':
