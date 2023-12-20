@@ -10,16 +10,13 @@ def hatch():
 
 class Larva:
     def __init__(self, x: float = 0, y: float = 0, id_larva=0):
-        self.time_to_hatch = random.randint(5, 10)  # Random time for larva to hatch
+        self.time_to_hatch = 7
         self.age = 0
         self.position = x, y
         self.id = id_larva
 
     def ajout_age(self):
         self.age += 1
-
-    def get_time_to_hatch(self, a, b):
-        self.time_to_hatch = random.randint(a, b)
 
 
 class Ant:
@@ -57,7 +54,7 @@ class Queen(Ant):
 
     @laying_rate.setter
     def laying_rate(self, new_laying_rate):
-        if 0.01 < new_laying_rate <= 0.1:
+        if 0.001 < new_laying_rate <= 0.1:
             self.__laying_rate = new_laying_rate
 
     def lay_eggs(self):

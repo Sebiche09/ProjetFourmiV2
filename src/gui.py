@@ -15,7 +15,7 @@ noise_map = generate_noise_map(3440, 1440, scale=135, octaves=1,
                                persistence=2, lacunarity=0.6, seed=random.randint(0, 100))
 
 
-def handle_events(running, simulation_running, paused, simulation_speed, stop_button_rect, pause_button_rect,
+def handle_events(running, simulation_running, paused, simulation_speed, egg_speed, spawn_speed, stop_button_rect, pause_button_rect,
                   window_width, window_height):
     for event in pygame.event.get():
         if event.type == QUIT:
@@ -25,17 +25,25 @@ def handle_events(running, simulation_running, paused, simulation_speed, stop_bu
                 simulation_running = not simulation_running
             if pause_button_rect.collidepoint(event.pos):
                 paused = not paused
-            if event.button == 1:
+        elif event.type == pygame.MOUSEMOTION:  # Ajout pour détecter les mouvements de la souris
+            if event.buttons[0]:  # Vérifie si le bouton gauche de la souris est enfoncé
                 slider_rect = pygame.Rect(window_width // 2 - 100, window_height // 6 - 50, 200, 20)
+                slider_rect1 = pygame.Rect(window_width // 2 - 100, window_height // 6 - 75, 200, 20)
+                slider_rect2 = pygame.Rect(window_width // 2 - 100, window_height // 6 - 100, 200, 20)
                 if slider_rect.collidepoint(event.pos):
                     simulation_speed = (event.pos[0] - slider_rect.left) / slider_rect.width
+                if slider_rect1.collidepoint(event.pos):
+                    egg_speed = (event.pos[0] - slider_rect1.left) / slider_rect1.width
+                if slider_rect2.collidepoint(event.pos):
+                    spawn_speed = (event.pos[0] - slider_rect2.left) / slider_rect2.width
 
-    return running, simulation_running, paused, simulation_speed
+    return running, simulation_running, paused, simulation_speed, egg_speed, spawn_speed
 
 
 def draw_initial_environment(screen, window_width, window_height, ant_colony):
-    background_color = (34, 139, 34)  # Vert Forêt
-    screen.fill(background_color)
+    background_image = pygame.image.load("img/background.jpg").convert()
+    background_image = pygame.transform.scale(background_image, (window_width, window_height))
+    screen.blit(background_image, (0, 0))
     # Dessiner les éléments de l'environnement initial
     pygame.draw.rect(screen, (255, 255, 255), (window_width // 2 - 100, window_height // 2 - 100, 200, 200))
     pygame.draw.rect(screen, (255, 255, 255),
@@ -79,9 +87,10 @@ def draw_buttons(screen, font, paused, running):
     screen.blit(pause_button_text, (20, 55))
 
 
-def lay_and_position_larva(ant_colony, window_width, window_height):
+def lay_and_position_larva(ant_colony, window_width, window_height, spawn_speed):
+    spawn_speed = 0.001 + (0.01 - 0.001) * spawn_speed
+    ant_colony.queen.laying_rate = spawn_speed
     new_larva = ant_colony.queen.lay_eggs()
-
     if new_larva:
         collides = any(
             pygame.Rect(larva.position[0], larva.position[1], 20, 20).colliderect(
@@ -97,11 +106,13 @@ def lay_and_position_larva(ant_colony, window_width, window_height):
             )
             ant_colony.add_larva(new_larva)
 
-def draw_larvae(screen, ant_colony):
+
+def draw_larvae(screen, ant_colony, egg_speed):
     larvae_to_remove = []
 
     for larva in ant_colony.larvae:
         pygame.draw.circle(screen, (0, 0, 0), larva.position, 3)
+        larva.time_to_hatch = 1 + (1000 - 1) * egg_speed
         larva.ajout_age()
 
         if larva.age >= larva.time_to_hatch:
@@ -121,7 +132,7 @@ def draw_male_ants(screen, ant_colony, window_width, window_height):
     for ant_key, (ant, x, y, count, move) in ant_colony.dicAnt.items():
         ant.age += 1
 
-        if ant.age >= 1000:
+        if ant.age >= 2000:
             ant.status_dead = True
 
         if not ant.status_dead and ant.ant_type == "Male":
@@ -169,7 +180,7 @@ def draw_soldier_ants(screen, ant_colony, window_width, window_height, last_dig_
     ants_to_remove = []
     for ant_key, (ant, x, y, count, move) in ant_colony.dicAnt.items():
         ant.age += 1
-        if ant.age >= 1000:
+        if ant.age >= 2000:
             ant.status_dead = True
         if not ant.status_dead and ant.ant_type == "Soldier":
             new_x, new_y, count, move = soldier_move(x, y, count, move,
@@ -230,24 +241,31 @@ def run_simulation_gui(ant_colony):
     simulation_running = True
     paused = False
     simulation_speed = 1
+    egg_speed = 1
+    spawn_speed = 1
     last_dig_direction = 0
     # ------------------------------------- Début simulation ------------------------------------
     while running and simulation_running:
-        running, simulation_running, paused, simulation_speed = handle_events(
-            running, simulation_running, paused, simulation_speed,
-            stop_button_rect, pause_button_rect, window_width, window_height
-        )
+        running, simulation_running, paused, simulation_speed, egg_speed, spawn_speed = handle_events(
+            running, simulation_running, paused, simulation_speed, egg_speed, spawn_speed,
+            stop_button_rect, pause_button_rect, window_width, window_height)
         if not paused:
             draw_initial_environment(screen, window_width, window_height, ant_colony)
             draw_buttons(screen, font, paused, running)
             draw_slider(screen, (window_width // 2 - 100, window_height // 6 - 50),
                         200, 20, simulation_speed)
+            draw_slider(screen, (window_width // 2 - 100, window_height // 6 - 75),
+                        200, 20, egg_speed)
+            draw_slider(screen, (window_width // 2 - 100, window_height // 6 - 100),
+                        200, 20, spawn_speed)
+
             draw_legend(screen, font, window_width)
 
             for x, y in digging_list:
-                pygame.draw.circle(screen, (255, 255, 255), (x, y), 10)
-            lay_and_position_larva(ant_colony, window_width, window_height)
-            draw_larvae(screen, ant_colony)
+                pygame.draw.rect(screen, (255, 255, 255),
+                                 (x - 10, y - 10, 20, 20))
+            lay_and_position_larva(ant_colony, window_width, window_height, spawn_speed)
+            draw_larvae(screen, ant_colony, egg_speed)
             draw_male_ants(screen, ant_colony, window_width, window_height)
             draw_nurse_ants(screen, ant_colony)
             draw_slaver_ants(screen, ant_colony)
@@ -256,6 +274,5 @@ def run_simulation_gui(ant_colony):
                                              digging_list)
 
             pygame.display.flip()
-            clock.tick(500 * simulation_speed)  # Limite le nombre d'images par seconde
-
+            clock.tick(100 * simulation_speed)  # Limite le nombre d'images par seconde
     pygame.quit()

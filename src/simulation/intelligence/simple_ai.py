@@ -84,7 +84,7 @@ def check_color_and_adjust(x, y, move, count, window_width, window_height, scree
     - Les nouveaux mouvement (move) et compteur (count) sont renvoyés après ajustement.
     """
     color_under_ant = screen.get_at((int(x + 6), int(y + 6)))
-    if color_under_ant == (34, 139, 34):  # Couleur verte représentant une zone de creusage
+    if color_under_ant != (255, 255, 255):  # Couleur verte représentant une zone de creusage
         move = move - math.pi  # Inverser la direction si la couleur sous la fourmi est verte
         count = random.randint(7, 12)
     return move, count

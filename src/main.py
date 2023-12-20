@@ -87,6 +87,7 @@ def main(ant_colony):
                     run_simulation_cli(ant_colony, temps_simulation)
             elif user_input == "simulate-gui":
                 run_simulation_gui(ant_colony)
+                break
             elif user_input.startswith('kill'):
 
                 parts = user_input.split()

@@ -97,7 +97,7 @@ def check_color_and_adjust(x, y, move, count, screen, noise_map, digging_list, l
     # Vérifier si la fourmi est déjà dans une situation de blocage
     blocked = (int(x), int(y)) in digging_list and count == 0
 
-    if color_under_ant == (34, 139, 34) and noise_value < digging_threshold and not blocked:
+    if color_under_ant != (255, 255, 255) and noise_value < digging_threshold and not blocked:
         digging_list.append((int(x), int(y)))
         # Ajustement progressif en fonction de la proximité du seuil
         adjustment_factor = min(1.0, (digging_threshold - noise_value) * 10)
@@ -111,7 +111,7 @@ def check_color_and_adjust(x, y, move, count, screen, noise_map, digging_list, l
 
         count = random.randint(7, 12)
 
-    elif color_under_ant == (34, 139, 34) and noise_value >= digging_threshold:
+    elif color_under_ant != (255, 255, 255) and noise_value >= digging_threshold:
         if blocked:
             # La fourmi est bloquée, elle peut choisir un nouveau mouvement aléatoire
             move = random.uniform(0, 2 * math.pi)
