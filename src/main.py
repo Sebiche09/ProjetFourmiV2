@@ -29,22 +29,14 @@ def run_simulation_cli(ant_colony, simulation_time):
     - Affiche le nombre de larves et de fourmis à la fin de la simulation.
     SEB
     """
-    try:
-        for _ in range(int(simulation_time)):
-            ant_colony.simulate_time_passing(1)
-            time.sleep(1)
+    for _ in range(int(simulation_time)):
+        ant_colony.simulate_time_passing(1)
+        time.sleep(1)
 
-        larva_count = ant_colony.get_larva_count()
-        ant_count = ant_colony.get_ant_count()
-        print(f"Nombre d'oeufs: {larva_count}")
-        print(f"Nombre de fourmis: {ant_count}")
-    except AttributeError as e:
-        raise RuntimeError(
-            "La classe AntColony doit implémenter les méthodes simulate_time_passing,"
-            " get_larva_count et get_ant_count.") from e
-    except ValueError as e:
-        # Si simulation_time n'est pas convertible en entier
-        raise ValueError("La durée de simulation doit être un nombre entier.") from e
+    larva_count = ant_colony.get_larva_count()
+    ant_count = ant_colony.get_ant_count()
+    print(f"Nombre d'oeufs: {larva_count}")
+    print(f"Nombre de fourmis: {ant_count}")
 
 
 def main(ant_colony):
@@ -65,51 +57,46 @@ def main(ant_colony):
     show_help()
 
     while True:
-        try:
-            user_input = input("Entrez une commande (help pour afficher l'aide): ").lower()
-
-            if user_input == "help":
-                show_help()
-            elif user_input == "exit":
-                print("Au revoir!")
-                break
-            elif user_input == "simulate-cli":
-                temps_simulation = input("Combien de temps voulez-vous faire "
-                                         "avancer la simulation? ")
-                if not temps_simulation.isdigit():
-                    print("Erreur: La durée de simulation doit être un nombre entier.")
-                else:
-                    temps_simulation = int(temps_simulation)
-                    if temps_simulation <= 0:
-                        print("Erreur: La durée de simulation doit être un nombre positif.")
-                    else:
-                        run_simulation_cli(ant_colony, temps_simulation)
-            elif user_input == "simulate-gui":
-                run_simulation_gui(ant_colony)
-            elif user_input.startswith('kill'):
-                # Récupérez le type de fourmi à tuer à partir de la commande
-                ant_type_to_kill = user_input[len('kill'):].strip().capitalize()
-                ant_colony.kill_ant_by_type(ant_type_to_kill)
-                ant_colony.show_generated_ant_types()
-
+        user_input = input("Entrez une commande (help pour afficher l'aide): ").lower()
+        if user_input == "help":
+            show_help()
+        elif user_input == "exit":
+            print("Au revoir!")
+            break
+        elif user_input == "simulate-cli":
+            temps_simulation = input("Combien de temps voulez-vous faire "
+                                     "avancer la simulation? ")
+            temps_simulation = int(temps_simulation)
+            if not isinstance(temps_simulation, int) and temps_simulation <= 0:
+                raise ValueError("La durée de simulation doit être un nombre entier.")
             else:
-                print("Commande non reconnue. Utilisez help pour "
-                      "afficher les commandes disponibles.")
+                run_simulation_cli(ant_colony, temps_simulation)
+        elif user_input == "simulate-gui":
+            run_simulation_gui(ant_colony)
+        elif user_input.startswith('kill'):
+            # Récupérez le type de fourmi à tuer à partir de la commande
+            ant_type_to_kill = user_input[len('kill'):].strip().capitalize()
+            ant_colony.kill_ant_by_type(ant_type_to_kill)
+            ant_colony.show_generated_ant_types()
 
-            print("killFourmi - Tuer une fourmi")
-            afficher_types_fourmis = input(
-                "Afficher les types de fourmis générés pendant la simulation ? (Oui/Non): ").lower()
-            if afficher_types_fourmis == "oui":
-                ant_colony.show_generated_ant_types()
+        else:
+            print("Commande non reconnue. Utilisez help pour "
+                  "afficher les commandes disponibles.")
 
-            continuer_simulation = input("Voulez-vous continuer la simulation? (Oui/Non): ").lower()
-            if continuer_simulation != "oui":
-                break
-        except KeyboardInterrupt:
-            print("\nSimulation interrompue par l'utilisateur.")
+        print("killFourmi - Tuer une fourmi")
+        afficher_types_fourmis = input(
+            "Afficher les types de fourmis générés pendant la simulation ? (Oui/Non): ").lower()
+        if afficher_types_fourmis == "oui":
+            ant_colony.show_generated_ant_types()
+
+        continuer_simulation = input("Voulez-vous continuer la simulation? (Oui/Non): ").lower()
+        if continuer_simulation != "oui":
             break
 
 
 if __name__ == "__main__":
-    ant_colony = AntColony()
-    main(ant_colony)
+    try:
+        ant_colony = AntColony()
+        main(ant_colony)
+    except ValueError as e:
+        print(f"erreur valeur : {e}")

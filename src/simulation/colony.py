@@ -1,6 +1,6 @@
 import random
 import time
-from .ant import Queen, Larva, Ant, SlaverAnt, NurseAnt, SlaveAnt, MaleAnt, SoldierAnt
+from .ant import Queen, Larva, Ant, SlaverAnt, NurseAnt, SlaveAnt, MaleAnt, SoldierAnt,hatch
 from collections import defaultdict
 from random import choice
 
@@ -39,7 +39,7 @@ class AntColony:
                 if larva.age >= larva.time_to_hatch:
                     num_ants = random.randint(1, self.max_ants_spawn)
                     for _ in range(num_ants):
-                        new_ant = larva.hatch()
+                        new_ant = hatch()
                         print(f"Une nouvelle fourmi ({new_ant.ant_type}) est née!")
                         self.queen.accept_new_ant(new_ant)
                         self.generated_ant_types.append(new_ant.ant_type)
