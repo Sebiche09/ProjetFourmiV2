@@ -53,16 +53,12 @@ class TestAntColony(unittest.TestCase):
 
 
     def test_zero_time_passed(self):
-        # Teste lorsque le temps passé est égal à zéro
         ant_count_before = self.ant_colony.get_ant_count()
         self.ant_colony.simulate_time_passing(0)
         ant_count_after = self.ant_colony.get_ant_count()
-        # Assurez-vous que rien ne change lorsque le temps passé est égal à zéro
         self.assertEqual(ant_count_after, ant_count_before)
 
     def test_negative_time_passed(self):
-        # Teste lorsque le temps passé est négatif
-        # Assurez-vous que cela lève une exception ou est correctement géré
         with self.assertRaises(ValueError):
             self.ant_colony.simulate_time_passing(-1)
 
