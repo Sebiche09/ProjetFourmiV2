@@ -9,7 +9,7 @@ def hatch():
 
 
 class Larva:
-    def __init__(self, x=0, y=0, id_larva=0):
+    def __init__(self, x: float = 0, y: float = 0, id_larva=0):
         self.time_to_hatch = random.randint(5, 10)  # Random time for larva to hatch
         self.age = 0
         self.position = x, y
@@ -23,7 +23,7 @@ class Larva:
 
 
 class Ant:
-    def __init__(self, ant_type="Male", x=0, y=0, id_ant=0):
+    def __init__(self, ant_type="Male", x: float = 10, y: float = 10, id_ant=0):
         self.ant_type = ant_type
         self.id = id_ant
         self.food = 100

@@ -3,6 +3,7 @@ import sys
 import unittest
 from simulation.colony import AntColony
 
+
 class TestAntColony(unittest.TestCase):
     def setUp(self):
         self.ant_colony = AntColony()
@@ -54,9 +55,6 @@ class TestAntColony(unittest.TestCase):
         self.ant_colony.kill_ant_by_type(ant_type_to_kill)
         self.ant_colony.show_generated_ant_types()
         self.assertNotIn(ant_type_to_kill, self.ant_colony.generated_ant_types)
-
-
-
 
 
 if __name__ == 'main':

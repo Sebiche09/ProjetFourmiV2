@@ -16,7 +16,9 @@ def generate_noise_map(width, height, scale, octaves, persistence, lacunarity, s
     dimensions width x height.
     SEB
     """
-    try:
+    if not (isinstance(width, int) and isinstance(height, int)):
+        raise TypeError("Les dimensions de la carte doivent être des entiers.")
+    else:
         world = [[0] * height for _ in range(width)]
         for i in range(width):
             for j in range(height):
@@ -37,8 +39,5 @@ def generate_noise_map(width, height, scale, octaves, persistence, lacunarity, s
                 world[i][j] = (world[i][j] - min_noise) / (max_noise - min_noise)
 
         return world
-    except (ValueError, TypeError) as e:
-        raise ValueError("Les paramètres de la fonction doivent être des valeurs numériques valides.") from e
-    except Exception as e:
-        raise RuntimeError(f"Une erreur inattendue s'est produite : {e}") from e
+
 

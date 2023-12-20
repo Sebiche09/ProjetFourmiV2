@@ -19,43 +19,38 @@ def move(x, y, count, move, window_width, window_height):
     - Si la fourmi atteint les bords de la fenêtre, elle change de direction de manière aléatoire.
     MAX
     """
-    try:
-        # Logique de mouvement pour les mâles
-        if count == 0:
-            random_move = random.randint(0, 3)
-            if random_move == 0:
-                angle = 0  # vers la droite
-            elif random_move == 1:
-                angle = math.pi / 2  # vers le haut
-            elif random_move == 2:
-                angle = math.pi  # vers la gauche
-            elif random_move == 3:
-                angle = 3 * math.pi / 2  # vers le bas
-            distance = 1
-            move = angle
-            count = random.randint(50, 60)
+    # Logique de mouvement pour les mâles
+    if count == 0:
+        random_move = random.randint(0, 3)
+        if random_move == 0:
+            angle = 0  # vers la droite
+        elif random_move == 1:
+            angle = math.pi / 2  # vers le haut
+        elif random_move == 2:
+            angle = math.pi  # vers la gauche
+        elif random_move == 3:
+            angle = 3 * math.pi / 2  # vers le bas
+        distance = 1
+        move = angle
+        count = random.randint(50, 60)
 
-        if count != 0:
-            angle = move
-            distance = 1
-            count -= 1
+    if count != 0:
+        angle = move
+        distance = 1
+        count -= 1
 
-        # Calculer les nouvelles coordonnées en fonction de la direction
+    # Calculer les nouvelles coordonnées en fonction de la direction
+    new_x = x + distance * math.cos(angle)
+    new_y = y + distance * math.sin(angle)
+
+    if not (30 <= new_x <= window_width - 30 and window_height / 6 + 30 <= new_y <= window_height - 30):
+        # Inverser la direction en ajoutant ou soustrayant π (pi)
+        angle += math.pi
+        # Recalculer les nouvelles coordonnées avec la direction inversée
         new_x = x + distance * math.cos(angle)
         new_y = y + distance * math.sin(angle)
 
-        if not (30 <= new_x <= window_width - 30 and window_height / 6 + 30 <= new_y <= window_height - 30):
-            # Inverser la direction en ajoutant ou soustrayant π (pi)
-            angle += math.pi
-            # Recalculer les nouvelles coordonnées avec la direction inversée
-            new_x = x + distance * math.cos(angle)
-            new_y = y + distance * math.sin(angle)
-
-        return new_x, new_y, count, move
-    except ValueError as e:
-        raise ValueError("La fonction move a rencontré une erreur de valeur.") from e
-    except Exception as e:
-        raise RuntimeError(f"Une erreur inattendue s'est produite dans la fonction move : {e}") from e
+    return new_x, new_y, count, move
 
 
 def action():
@@ -88,15 +83,8 @@ def check_color_and_adjust(x, y, move, count, window_width, window_height, scree
     - Si la couleur est différente, la fourmi continue dans la direction actuelle.
     - Les nouveaux mouvement (move) et compteur (count) sont renvoyés après ajustement.
     """
-    try:
-        color_under_ant = screen.get_at((int(x + 6), int(y + 6)))
-        if color_under_ant == (34, 139, 34):  # Couleur verte représentant une zone de creusage
-            move = move - math.pi  # Inverser la direction si la couleur sous la fourmi est verte
-            count = random.randint(7, 12)
-        return move, count
-    except ValueError as e:
-        raise ValueError("La fonction move a rencontré une erreur de valeur.") from e
-    except Exception as e:
-        raise RuntimeError(f"Une erreur inattendue s'est produite dans la fonction move : {e}") from e
-
-
+    color_under_ant = screen.get_at((int(x + 6), int(y + 6)))
+    if color_under_ant == (34, 139, 34):  # Couleur verte représentant une zone de creusage
+        move = move - math.pi  # Inverser la direction si la couleur sous la fourmi est verte
+        count = random.randint(7, 12)
+    return move, count
